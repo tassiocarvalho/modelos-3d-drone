@@ -53,7 +53,8 @@ furo1_posicao_y = 5  # mm (medida do centro do furo até a borda)
 furo1 = Part.makeCylinder(furo_raio, furo_altura)
 furo1.translate(App.Vector(largura / 2, furo1_posicao_y, 0))
 
-furo2_posicao_y = 15  # mm (medida do centro do furo até a borda)
+# Atualizar a posição do segundo furo para garantir 15 mm entre os centros
+furo2_posicao_y = 5 + 15  # 5 mm do centro do primeiro furo + 15 mm de distância entre os furos
 furo2 = Part.makeCylinder(furo_raio, furo_altura)
 furo2.translate(App.Vector(largura / 2, furo2_posicao_y, 0))
 
