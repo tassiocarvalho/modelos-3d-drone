@@ -5,7 +5,7 @@ import Part
 doc = App.newDocument("Montagem")
 
 # Dimensões do cubo
-cubo_lado = 47.4
+cubo_lado = 47.3
 furo_diametro = 4.5
 furo_profundidade = 20.0
 distancia_inferior = 20.0
