@@ -1,0 +1,111 @@
+import FreeCAD as App
+import Part
+
+# Definir parâmetros do cubo
+cubo_lado = 47.4
+furo_diametro = 4.5
+furo_profundidade = 20.0
+distancia_centro_topo = 20.0
+
+# Criar documento
+doc = App.newDocument()
+
+# Criar o cubo
+cubo = Part.makeBox(cubo_lado, cubo_lado, cubo_lado)
+
+# Calcular a posição dos furos
+distancia_superior = cubo_lado - distancia_centro_topo  # Distância do topo do cubo para o centro dos furos
+
+# Definir a posição dos furos nas superfícies do cubo
+furo_posicao_front = App.Vector(cubo_lado / 2, 0, distancia_superior)
+furo_posicao_right = App.Vector(cubo_lado, cubo_lado / 2, distancia_superior)
+furo_posicao_rear = App.Vector(cubo_lado / 2, cubo_lado, distancia_superior)
+furo_posicao_left = App.Vector(0, cubo_lado / 2, distancia_superior)
+
+# Criar os cilindros (furos) com a profundidade especificada
+furo_front = Part.makeCylinder(furo_diametro / 2, furo_profundidade, furo_posicao_front, App.Vector(0, 1, 0))
+furo_right = Part.makeCylinder(furo_diametro / 2, furo_profundidade, furo_posicao_right, App.Vector(-1, 0, 0))
+furo_rear = Part.makeCylinder(furo_diametro / 2, furo_profundidade, furo_posicao_rear, App.Vector(0, -1, 0))
+furo_left = Part.makeCylinder(furo_diametro / 2, furo_profundidade, furo_posicao_left, App.Vector(1, 0, 0))
+
+# Subtrair os furos do cubo
+cubo_com_furos = cubo.cut(furo_front).cut(furo_right).cut(furo_rear).cut(furo_left)
+
+# Adicionar o cubo com os furos ao documento
+cubo_obj = doc.addObject("Part::Feature", "CuboComFuros")
+cubo_obj.Shape = cubo_com_furos
+
+# Definir parâmetros do prisma
+base_size = 55  # Tamanho da base quadrada
+top_size = 40   # Tamanho do topo quadrado
+height = 20     # Altura do prisma
+
+# Criar base quadrada
+base = Part.makePolygon([
+    App.Vector(-base_size/2, -base_size/2, 0),
+    App.Vector(base_size/2, -base_size/2, 0),
+    App.Vector(base_size/2, base_size/2, 0),
+    App.Vector(-base_size/2, base_size/2, 0),
+    App.Vector(-base_size/2, -base_size/2, 0)
+])
+
+# Criar topo quadrado
+top = Part.makePolygon([
+    App.Vector(-top_size/2, -top_size/2, height),
+    App.Vector(top_size/2, -top_size/2, height),
+    App.Vector(top_size/2, top_size/2, height),
+    App.Vector(-top_size/2, top_size/2, height),
+    App.Vector(-top_size/2, -top_size/2, height)
+])
+
+# Fazer loft entre base e topo
+loft = Part.makeLoft([base, top], True)
+
+# Definir parâmetros dos furos do prisma
+hole_radius = 2  # Raio dos furos
+hole_depth = 20  # Profundidade dos furos
+hole_distance = 33  # Distância entre os centros dos furos
+
+# Criar cilindros para os furos no prisma
+holes = []
+positions = [
+    (0, hole_distance / 2),   # Norte
+    (0, -hole_distance / 2),  # Sul
+    (hole_distance / 2, 0),   # Leste
+    (-hole_distance / 2, 0)   # Oeste
+]
+
+for pos in positions:
+    hole = Part.makeCylinder(hole_radius, hole_depth, App.Vector(pos[0], pos[1], 0))
+    holes.append(hole)
+
+# Subtrair os furos do prisma
+prism_with_holes = loft
+for hole in holes:
+    prism_with_holes = prism_with_holes.cut(hole)
+
+# Criar o objeto do prisma com furos
+prism_obj = doc.addObject("Part::Feature", "PrismWithHoles")
+prism_obj.Shape = prism_with_holes
+
+# Mover o prisma para que o centro da base esteja alinhado com o centro do topo do cubo
+prism_obj.Placement = App.Placement(App.Vector((cubo_lado - base_size) / 2 + base_size / 2, (cubo_lado - base_size) / 2 + base_size / 2, cubo_lado), App.Rotation(App.Vector(0, 0, 1), 0))
+
+# Unir o cubo e o prisma
+final_shape = cubo_com_furos.fuse(prism_obj.Shape)
+
+# Adicionar a peça final ao documento
+final_obj = doc.addObject("Part::Feature", "CuboComPrisma")
+final_obj.Shape = final_shape
+
+# Recalcular o documento para atualizar a visualização
+doc.recompute()
+
+# Exportar como STL
+__objs__ = []
+__objs__.append(doc.getObject("CuboComPrisma"))
+
+stl_file = 'Cubo_com_Prisma_Atualizado.stl'
+Mesh.export(__objs__, stl_file)
+
+print(f"Cubo com prisma criado e exportado como {stl_file} com sucesso!")
