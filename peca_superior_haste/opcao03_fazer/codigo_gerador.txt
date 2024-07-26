@@ -1,0 +1,110 @@
+import FreeCAD as App
+import Part
+import Sketcher
+
+doc = App.newDocument()
+
+# Definir as dimensões do cubo
+cubo_lado = 47.4
+furo_diametro = 4.5
+furo_profundidade = 20.0
+distancia_superior = 20.0
+
+# Criar o cubo
+cubo = Part.makeBox(cubo_lado, cubo_lado, cubo_lado)
+
+# Definir a nova posição dos furos nas superfícies do cubo (20mm do topo)
+furo_posicao_front = App.Vector(cubo_lado / 2, 0, cubo_lado - distancia_superior)
+furo_posicao_right = App.Vector(cubo_lado, cubo_lado / 2, cubo_lado - distancia_superior)
+furo_posicao_rear = App.Vector(cubo_lado / 2, cubo_lado, cubo_lado - distancia_superior)
+furo_posicao_left = App.Vector(0, cubo_lado / 2, cubo_lado - distancia_superior)
+
+# Criar os cilindros (furos) com a profundidade especificada
+furo_front = Part.makeCylinder(furo_diametro / 2, furo_profundidade, furo_posicao_front, App.Vector(0, 1, 0))
+furo_right = Part.makeCylinder(furo_diametro / 2, furo_profundidade, furo_posicao_right, App.Vector(-1, 0, 0))
+furo_rear = Part.makeCylinder(furo_diametro / 2, furo_profundidade, furo_posicao_rear, App.Vector(0, -1, 0))
+furo_left = Part.makeCylinder(furo_diametro / 2, furo_profundidade, furo_posicao_left, App.Vector(1, 0, 0))
+
+# Subtrair os furos do cubo
+cubo_com_furos = cubo.cut(furo_front).cut(furo_right).cut(furo_rear).cut(furo_left)
+
+# Adicionar o cubo com os furos ao documento
+cubo_obj = doc.addObject("Part::Feature", "CuboComFuros")
+cubo_obj.Shape = cubo_com_furos
+
+# Criação do esboço da base quadrada com 55 mm
+base = doc.addObject('Sketcher::SketchObject', 'Base')
+base.Placement = App.Placement(App.Vector(cubo_lado / 2, cubo_lado / 2, cubo_lado), App.Rotation(0, 0, 0, 1))
+half_side_length = 55 / 2
+geoList = [
+    Part.LineSegment(App.Vector(-half_side_length, -half_side_length, 0), App.Vector(half_side_length, -half_side_length, 0)),
+    Part.LineSegment(App.Vector(half_side_length, -half_side_length, 0), App.Vector(half_side_length, half_side_length, 0)),
+    Part.LineSegment(App.Vector(half_side_length, half_side_length, 0), App.Vector(-half_side_length, half_side_length, 0)),
+    Part.LineSegment(App.Vector(-half_side_length, half_side_length, 0), App.Vector(-half_side_length, -half_side_length, 0))
+]
+for geo in geoList:
+    base.addGeometry(geo)
+
+# Criação do esboço do topo redondo
+topo = doc.addObject('Sketcher::SketchObject', 'Topo')
+topo.Placement = App.Placement(App.Vector(cubo_lado / 2, cubo_lado / 2, cubo_lado + 20), App.Rotation(0, 0, 0, 1))
+topo.addGeometry(Part.Circle(App.Vector(0, 0, 20), App.Vector(0, 0, 1), 20.5))
+
+# Atualizar documento
+doc.recompute()
+
+# Criar o Loft entre os dois esboços
+loft = doc.addObject('Part::Loft', 'Loft')
+loft.Sections = [base, topo]
+loft.Solid = True
+loft.Ruled = False
+loft.Closed = False
+
+# Atualizar o documento para visualizar o Loft
+doc.recompute()
+
+# Criação dos cilindros para representar os furos nos pontos cardeais do topo
+furo_coords = [
+    (0, 16.5),  # Norte
+    (0, -16.5), # Sul
+    (16.5, 0),  # Leste
+    (-16.5, 0)  # Oeste
+]
+
+furos = []
+
+for i, (x, y) in enumerate(furo_coords):
+    furo = doc.addObject('Part::Cylinder', f'Furo_{i+1}')
+    furo.Radius = 1.5  # Raio do furo de 3mm de diâmetro
+    furo.Height = 20  # Altura do furo para descer até a base
+    furo.Placement = App.Placement(App.Vector(x + cubo_lado / 2, y + cubo_lado / 2, cubo_lado), App.Rotation(0, 0, 0, 1))
+    furos.append(furo)
+
+# Atualizar o documento para visualizar os cilindros
+doc.recompute()
+
+# Realizar a operação booleana de corte para criar os furos
+cut = doc.addObject('Part::Cut', 'Cut')
+cut.Base = loft
+cut.Tool = furos[0]
+
+for furo in furos[1:]:
+    new_cut = doc.addObject('Part::Cut', f'Cut_{furo.Name}')
+    new_cut.Base = cut
+    new_cut.Tool = furo
+    cut = new_cut
+
+# Atualizar o documento para visualizar os furos
+doc.recompute()
+
+# Combinar o cubo e a peça com furos
+compound = doc.addObject('Part::Compound', 'Compound')
+compound.Links = [cubo_obj, cut]
+
+# Atualizar o documento para visualizar o conjunto
+doc.recompute()
+
+# Salvar o documento
+doc.saveAs('Cubo_com_Furos_e_Peca_Atualizado.FCStd')
+
+print("Peça posicionada corretamente em cima do cubo com furos criada com sucesso!")
