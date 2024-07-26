@@ -1,5 +1,6 @@
 import FreeCAD as App
 import Part
+import Mesh
 
 # Definir parâmetros do cubo
 cubo_lado = 47.4
@@ -62,7 +63,7 @@ top = Part.makePolygon([
 loft = Part.makeLoft([base, top], True)
 
 # Definir parâmetros dos furos do prisma
-hole_radius = 2  # Raio dos furos
+hole_radius = 1.5  # Raio dos furos (3 mm de diâmetro)
 hole_depth = 20  # Profundidade dos furos
 hole_distance = 33  # Distância entre os centros dos furos
 
