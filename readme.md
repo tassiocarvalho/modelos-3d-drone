@@ -11,6 +11,10 @@ Dentro de cada pasta, você encontrará os seguintes arquivos:
 - **Python**: Script utilizado para gerar a peça no FreeCAD.
 - **PNG**: Imagem que oferece uma visualização da peça em 3D.
 
+## Peças Especiais
+
+- **Adaptação**: para Hélice: Há uma peça específica neste repositório com adaptação para hélice modelo Mavic 2 Zoom e Mavic 2 Pro.
+
 ## Ferramentas Utilizadas
 
 - **FreeCAD**: Software utilizado para gerar as peças a partir dos scripts Python.
