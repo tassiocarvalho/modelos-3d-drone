@@ -13,7 +13,7 @@ Dentro de cada pasta, você encontrará os seguintes arquivos:
 
 ## Peças Especiais
 
-- **Adaptação**: para Hélice: Há uma peça específica neste repositório com adaptação para hélice modelo Mavic 2 Zoom e Mavic 2 Pro.
+- **Adaptação para Hélice**: Há uma peça específica neste repositório com adaptação para hélice modelo Mavic 2 Zoom e Mavic 2 Pro.
 
 ## Ferramentas Utilizadas
 
