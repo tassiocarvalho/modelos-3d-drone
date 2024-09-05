@@ -21,4 +21,4 @@ Dentro de cada pasta, você encontrará os seguintes arquivos:
 
 ## Características de algumas versões de peças 
 
-- Algumas peças sofreram mudanças ao decorrer do projetos, devido a diversos fatores como tamanho ou fragilidade, como exemplo na peça inferior temos duas versões uma v1 e uma v2, a v1 que seria a versão inicial, possui uma fragilidade a aresta que une a peça em formato de paralelepípedo com o furo ela tem muita facilidade de ser quebrada, foi atualiazada acrescentando um curvatura nessa aresta, como mostra na v2, segunda versão mais atualizada, foi também ajustada a altura do paralelepípedo de 17mm para 18mm.
+- Algumas peças sofreram mudanças ao decorrer do projetos, devido a diversos fatores como tamanho ou fragilidade, como exemplo na peça inferior temos duas versões uma v1 e uma v2, a v1 que seria a versão inicial, possui uma fragilidade a aresta que une a peça em formato de paralelepípedo com o cubo de 4 furos, ela tem muita facilidade de ser quebrada nessa região, foi atualiazada acrescentando um curvatura nessa aresta, como mostra na v2 versão mais atualizada, foi também ajustada a altura do paralelepípedo de 17mm para 18mm.
