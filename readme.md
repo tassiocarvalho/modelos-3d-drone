@@ -18,3 +18,7 @@ Dentro de cada pasta, você encontrará os seguintes arquivos:
 ## Ferramentas Utilizadas
 
 - **FreeCAD**: Software utilizado para gerar as peças a partir dos scripts Python.
+
+## Características de algumas versões de peças 
+
+- Algumas peças sofreram mudanças ao decorrer do projetos, devido a diversos fatores como tamanho ou fragilidade, como exemplo na peça inferior temos duas versões uma v1 e uma v2, a v1 que seria a versão inicial, possui uma fragilidade a aresta que une a peça em formato de paralelepípedo com o furo ela tem muita facilidade de ser quebrada, foi atualiazada acrescentando um curvatura nessa aresta, como mostra na v2, segunda versão mais atualizada, foi também ajustada a altura do paralelepípedo de 17mm para 18mm.
