@@ -13,7 +13,7 @@ doc = App.newDocument()
 cilindro = Part.makeCylinder(diametro/2, altura)
 
 # Definir as dimensões do primeiro furo circular (no topo)
-diametro_furo = 2.5 # em mm
+diametro_furo = 2 # em mm
 profundidade_furo = 13  # em mm
 
 # Criar o furo partindo do topo do cilindro
@@ -50,7 +50,7 @@ furo_horizontal.translate(Base.Vector(-diametro/2, 0, 5))  # Posicionar o furo n
 cilindro_com_furo = cilindro_com_furo.cut(furo_horizontal)
 
 # Adicionar furos retangulares
-lado_longo = 4.7  # mm
+lado_longo = 5.9  # mm
 lado_curto = 4  # mm
 profundidade_retangulo = 5  # mm
 raio = diametro / 2  # raio do cilindro
@@ -77,7 +77,7 @@ for i in range(3):
     cilindro_com_furo = cilindro_com_furo.cut(retangulo)
 
 # Adicionar furos retangulares menores
-lado_longo2 = 4.7  # mm
+lado_longo2 = 5.9  # mm
 lado_curto2 = 4  # mm
 profundidade_retangulo2 = 5  # mm
 offset_radial2 = 1.55 
