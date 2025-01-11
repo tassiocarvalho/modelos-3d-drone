@@ -2,36 +2,54 @@ import FreeCAD
 import Part
 
 # Obter o documento ativo ou criar um novo
-doc = FreeCAD.ActiveDocument or FreeCAD.newDocument("RoundSurfaceWithRing")
+doc = FreeCAD.ActiveDocument or FreeCAD.newDocument("RoundSurfaceWithRings")
 
 # Dimensões da base
 diametro_base = 41  # Diâmetro da peça de base
 altura_base = 2  # Altura da peça de base
 
-# Dimensões do anel
-diametro_externo_anel = 41  # Diâmetro externo do anel
-espessura_anel = 2  # Espessura do anel
-altura_anel = 10  # Altura do anel
+# Dimensões do primeiro anel
+diametro_externo_anel1 = 41  # Diâmetro externo do anel
+espessura_anel1 = 2  # Espessura do anel
+altura_anel1 = 10  # Altura do anel
 
-raio_externo_anel = diametro_externo_anel / 2
-raio_interno_anel = raio_externo_anel - espessura_anel
+# Dimensões do segundo anel
+diametro_externo_anel2 = 37  # Diâmetro externo do segundo anel
+espessura_anel2 = 1  # Espessura do segundo anel
+altura_anel2 = 3.2  # Altura do segundo anel
+elevacao_anel2 = 0  # Elevação acima da base
+
+# Raio dos anéis
+raio_externo_anel1 = diametro_externo_anel1 / 2
+raio_interno_anel1 = raio_externo_anel1 - espessura_anel1
+
+raio_externo_anel2 = diametro_externo_anel2 / 2
+raio_interno_anel2 = raio_externo_anel2 - espessura_anel2
 
 # Criar o cilindro de base
 base = Part.makeCylinder(diametro_base / 2, altura_base)
 
-# Criar o anel
-anel_externo = Part.makeCylinder(raio_externo_anel, altura_anel)
-anel_interno = Part.makeCylinder(raio_interno_anel, altura_anel)
-anel = anel_externo.cut(anel_interno)
+# Criar o primeiro anel
+anel1_externo = Part.makeCylinder(raio_externo_anel1, altura_anel1)
+anel1_interno = Part.makeCylinder(raio_interno_anel1, altura_anel1)
+anel1 = anel1_externo.cut(anel1_interno)
 
-# Transladar o anel para ficar em cima da base
-anel.translate(FreeCAD.Vector(0, 0, altura_base))
+# Posicionar o primeiro anel em cima da base
+anel1.translate(FreeCAD.Vector(0, 0, altura_base))
 
-# Combinar a base e o anel
-peça_final = base.fuse(anel)
+# Criar o segundo anel
+anel2_externo = Part.makeCylinder(raio_externo_anel2, altura_anel2)
+anel2_interno = Part.makeCylinder(raio_interno_anel2, altura_anel2)
+anel2 = anel2_externo.cut(anel2_interno)
+
+# Posicionar o segundo anel no centro do primeiro e elevar 5.6 mm acima da parte inferior da peça
+anel2.translate(FreeCAD.Vector(0, 0, altura_base + elevacao_anel2))
+
+# Combinar a base, o primeiro anel e o segundo anel
+peça_final = base.fuse(anel1).fuse(anel2)
 
 # Adicionar a peça ao documento
-obj = doc.addObject("Part::Feature", "RoundSurfaceWithRing")
+obj = doc.addObject("Part::Feature", "RoundSurfaceWithRings")
 obj.Shape = peça_final
 
 # Recalcular o documento para atualizar a visualização
