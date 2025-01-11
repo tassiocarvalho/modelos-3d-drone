@@ -1,0 +1,38 @@
+import FreeCAD
+import Part
+
+# Obter o documento ativo ou criar um novo
+doc = FreeCAD.ActiveDocument or FreeCAD.newDocument("RoundSurfaceWithRing")
+
+# Dimensões da base
+diametro_base = 41  # Diâmetro da peça de base
+altura_base = 2  # Altura da peça de base
+
+# Dimensões do anel
+diametro_externo_anel = 41  # Diâmetro externo do anel
+espessura_anel = 2  # Espessura do anel
+altura_anel = 10  # Altura do anel
+
+raio_externo_anel = diametro_externo_anel / 2
+raio_interno_anel = raio_externo_anel - espessura_anel
+
+# Criar o cilindro de base
+base = Part.makeCylinder(diametro_base / 2, altura_base)
+
+# Criar o anel
+anel_externo = Part.makeCylinder(raio_externo_anel, altura_anel)
+anel_interno = Part.makeCylinder(raio_interno_anel, altura_anel)
+anel = anel_externo.cut(anel_interno)
+
+# Transladar o anel para ficar em cima da base
+anel.translate(FreeCAD.Vector(0, 0, altura_base))
+
+# Combinar a base e o anel
+peça_final = base.fuse(anel)
+
+# Adicionar a peça ao documento
+obj = doc.addObject("Part::Feature", "RoundSurfaceWithRing")
+obj.Shape = peça_final
+
+# Recalcular o documento para atualizar a visualização
+doc.recompute()
