@@ -16,7 +16,7 @@ altura_anel1 = 10  # Altura do anel
 # Dimensões do segundo anel
 diametro_externo_anel2 = 37  # Diâmetro externo do segundo anel
 espessura_anel2 = 1  # Espessura do segundo anel
-altura_anel2 = 3.2  # Altura do segundo anel
+altura_anel2 = 6.8  # Altura do segundo anel
 elevacao_anel2 = 0  # Elevação acima da base
 
 # Raio dos anéis
