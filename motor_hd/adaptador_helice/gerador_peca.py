@@ -72,7 +72,7 @@ for pos in posicoes_furos:
 
 # Dimensões do cilindro adicional
 diametro = 19.5  # mm
-altura = 14  # mm
+altura = 6  # mm
 cilindro_adicional = Part.makeCylinder(diametro / 2, altura)
 
 # Adicionar furos retangulares maiores
