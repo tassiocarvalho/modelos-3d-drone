@@ -47,7 +47,7 @@ vazio_diametro = 37.5
 vazio_profundidade = 10
 
 # Parâmetros do paralelepípedo lateral
-paralelepipedo_altura = 5  # Altura do paralelepípedo
+paralelepipedo_altura = 20 # Altura do paralelepípedo
 paralelepipedo_lado = 37 # Lado do paralelepípedo
 paralelepipedo_pos_z = 10  # Posição Z do paralelepípedo
 paralelepipedo_espessura = 21 # Profundidade do paralelepípedo
