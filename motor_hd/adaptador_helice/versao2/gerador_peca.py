@@ -74,7 +74,7 @@ else:
 
 # Dimensões do vazio principal
 diametro_vazio = 15  # mm
-altura_vazio = altura_cilindro - 8.5  # mm
+altura_vazio = altura_cilindro - 8.6  # mm
 raio_vazio = diametro_vazio / 2
 
 # Criar o vazio principal
@@ -171,7 +171,7 @@ peca_final = peca_combinada.fuse(cilindro_adicional)
 # O topo da peça final (cilindro adicional) está em z = 3 + altura_cilindro + altura = 3 + 11.5 + 10 = 24.5 mm
 # Queremos um furo descendo 13 mm a partir do topo.
 # Raio do furo = 1 mm (para ter diâmetro de 2 mm)
-furo_central = Part.makeCylinder(1.0, 13.0)
+furo_central = Part.makeCylinder(1.35, 13.0)
 # Transladar para que o topo do furo fique em z = 24.5 e a base em z = 11.5
 furo_central.translate(App.Vector(0, 0, 24.5 - 13.0))
 
